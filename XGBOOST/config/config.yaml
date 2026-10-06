@@ -1,0 +1,58 @@
+# Paths are relative to XGBOOST, so runs work from any current directory.
+# Master seed for dataset sampling, train/test and validation splits, CV,
+# randomized search, Optuna's TPE sampler, and XGBoost row/column sampling.
+# Optuna inner fold validation uses seed + fold index (42, 43, 44 by default).
+seed: 42
+n_jobs: 4
+data:
+  # Same balanced dataset and 80/20 split used in nn.ipynb.
+  path: ../data/diabetes-health-indicators-dataset.zip/diabetes_binary_5050split_health_indicators_BRFSS2015.csv
+  target: Diabetes_binary
+  test_size: 0.2
+  max_rows: null
+model:
+  objective: binary:logistic
+  eval_metric: logloss
+  tree_method: hist
+  enable_categorical: false
+  n_estimators: 300
+  max_depth: 4
+  learning_rate: 0.05
+  subsample: 0.8
+  colsample_bytree: 0.8
+early_stopping:
+  enabled: true
+  validation_size: 0.15
+  rounds: 30
+  max_estimators: 800
+  eval_metric: auc
+tuning:
+  enabled: true
+  method: optuna  # optuna or random
+  scoring: roc_auc
+  cv_folds: 3
+  n_iter: 8
+  n_jobs: 1
+  # Integer bounds include both endpoints; float bounds define continuous ranges.
+  # Both randomized search and Optuna sample from this one shared space.
+  search_space:
+    n_estimators: {distribution: int, low: 200, high: 400}
+    max_depth: {distribution: int, low: 2, high: 8}
+    learning_rate: {distribution: loguniform, low: 0.01, high: 0.2}
+    subsample: {distribution: uniform, low: 0.6, high: 1.0}
+    colsample_bytree: {distribution: uniform, low: 0.6, high: 1.0}
+    min_child_weight: {distribution: int, low: 1, high: 10}
+    reg_lambda: {distribution: loguniform, low: 0.01, high: 10.0}
+    gamma: {distribution: uniform, low: 0.0, high: 5.0}
+  optuna:
+    n_trials: 20
+    timeout_seconds: null
+    pruning_startup_trials: 5
+output:
+  dir: artifacts
+hydra:
+  run:
+    dir: .
+  output_subdir: null
+  job:
+    chdir: false
