@@ -11,12 +11,16 @@ import numpy as np
 import optuna
 import pandas as pd
 from omegaconf import DictConfig, OmegaConf
-from scipy.stats import randint, uniform, loguniform
+from scipy.stats import loguniform, randint, uniform
 from sklearn.base import clone
 from sklearn.metrics import accuracy_score, confusion_matrix, roc_auc_score
-from sklearn.model_selection import RandomizedSearchCV, StratifiedKFold, train_test_split
-from xgboost import XGBClassifier
+from sklearn.model_selection import (
+    RandomizedSearchCV,
+    StratifiedKFold,
+    train_test_split,
+)
 
+from xgboost import XGBClassifier
 
 HERE = Path(__file__).resolve().parent
 

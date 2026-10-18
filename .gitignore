@@ -1,3 +1,12 @@
 data/diabetes-health-indicators-dataset.zip/diabetes_012_health_indicators_BRFSS2015.csv
+XGBOOST/.venv/
+XGBOOST/artifacts/
+XGBOOST/temp/
+.venv/
+**/__pycache__/
+diabetes_xgboost.log
+.uv-cache/
+analysis_outputs/*
+!analysis_outputs/README.md
 data/diabetes-health-indicators-dataset.zip/diabetes_binary_5050split_health_indicators_BRFSS2015.csv
 data/diabetes-health-indicators-dataset.zip/diabetes_binary_health_indicators_BRFSS2015.csv
